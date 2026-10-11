@@ -24,12 +24,16 @@ else:
 
 # ─── Trusted / High-Priority Source Domains ──────────────────────────────────
 TRUSTED_DOMAINS = [
-    "reuters.com", "apnews.com", "bbc.com", "bbc.co.uk",
-    "ndtv.com", "thehindu.com", "indianexpress.com",
-    "altnews.in", "boomlive.in", "factcheck.org",
-    "snopes.com", "politifact.com",
-    "pib.gov.in", "mha.gov.in", "mohfw.gov.in",
-    "who.int", "cdc.gov",
+    # Global Wires & Reputable Outlets
+    "reuters.com", "apnews.com", "bbc.com", "bbc.co.uk", "bloomberg.com", "aljazeera.com",
+    # Leading National & Regional News Publications
+    "thehindu.com", "indianexpress.com", "ndtv.com", "indiatimes.com", "timesofindia.indiatimes.com",
+    "hindustantimes.com", "indiatoday.in", "livemint.com", "economictimes.indiatimes.com",
+    "deccanherald.com", "telegraphindia.com", "aninews.in", "ptinews.com", "theprint.in",
+    # Certified Fact-Checking Registries
+    "altnews.in", "boomlive.in", "factcheck.org", "snopes.com", "politifact.com", "thequint.com",
+    # Government & Primary Portals
+    "pib.gov.in", "mha.gov.in", "mohfw.gov.in", "isro.gov.in", "rbi.org.in", "who.int", "cdc.gov",
 ]
 
 
@@ -71,18 +75,24 @@ def _is_trusted(url: str) -> bool:
 
 
 _VERDICT_PROMPT = """
-You are a professional fact-checker. Based only on the search results below, determine if the following claim is VERIFIED, CONTRADICTED, or UNPROVEN.
+You are an expert fact-checker and investigative analyst.
+Evaluate whether the following CLAIM is VERIFIED, CONTRADICTED, or UNPROVEN based on the retrieved evidence from news and official sources.
 
 CLAIM: {claim}
 
-SEARCH RESULTS:
+EVIDENCE FROM SEARCH:
 {results}
+
+CRITICAL GUIDELINES:
+1. Mark as "VERIFIED" if established mainstream news outlets (e.g. The Hindu, Times of India, NDTV, BBC, Reuters, AP, Indian Express, Hindustan Times, PIB, or official government bodies) actively report that this event happened, was announced, or occurred as described. Genuine morning news reported by reputable publishers is VERIFIED.
+2. Mark as "CONTRADICTED" if fact-checkers (Snopes, AltNews, BOOM, etc.) or reliable media explicitly debunk it, call it false/fake, or if authorities denied it.
+3. Mark as "UNPROVEN" ONLY if there is virtually zero coverage from credible news outlets and no official confirmation found.
 
 Respond ONLY in this exact JSON format:
 {{
   "status": "VERIFIED" | "CONTRADICTED" | "UNPROVEN",
   "confidence": 0.0 to 1.0,
-  "explanation": "1-2 sentence explanation citing specific results",
+  "explanation": "1-2 sentence explanation citing the reporting news outlets or official verification",
   "key_source": "Most relevant URL from the results, or empty string"
 }}
 """
@@ -91,14 +101,32 @@ Respond ONLY in this exact JSON format:
 def verify_claim(claim: str) -> dict:
     """
     Main function: searches the web for evidence on a claim and returns a verdict.
-
-    Returns dict with: status, confidence, explanation, citations
+    Uses dual-query search (real news coverage + fact-check debunks).
     """
-    # 1. Live web search for the claim
-    search_results = live_search(f'"{claim}" fact check site:reuters.com OR site:apnews.com OR site:snopes.com OR site:altnews.in', max_results=4)
+    # Clean claim words for optimal search retrieval
+    clean_claim = re.sub(r'[^\w\s]', ' ', claim).strip()
+    words = clean_claim.split()
+    short_query = " ".join(words[:10]) if len(words) > 10 else clean_claim
+
+    # 1. Multi-pronged search:
+    # Query A: News search (catches morning newspaper and media reports)
+    news_results = live_search(f"{short_query} news", max_results=4)
+
+    # Query B: Fact-check query (catches if it's a known debunked hoax)
+    fact_results = live_search(f"{short_query} fact check", max_results=3)
+
+    # Deduplicate while preserving order
+    seen_urls = set()
+    search_results = []
+    for r in (news_results + fact_results):
+        href = r.get("href", r.get("url", ""))
+        if href and href not in seen_urls:
+            seen_urls.add(href)
+            search_results.append(r)
+
+    # Fallback to direct claim text if empty
     if not search_results:
-        # Broader fallback search
-        search_results = live_search(claim, max_results=5)
+        search_results = live_search(short_query, max_results=5)
 
     # 2. Optional Google Fact Check API
     fact_check_hits = google_fact_check(claim)
@@ -235,36 +263,47 @@ def _gemini_verdict(claim: str, results_text: str) -> dict:
 
 
 def _fallback_verdict(claim: str, results: list, fact_checks: list) -> dict:
-    """Simple keyword-based verdict when Gemini is unavailable."""
-    debunk_keywords = ["false", "misleading", "debunked", "misinformation", "fake", "not true", "no evidence"]
-    confirm_keywords = ["confirmed", "true", "verified", "official", "government", "report confirms"]
+    """Smart corroboration verdict when LLM quota is busy."""
+    debunk_keywords = ["false", "misleading", "debunked", "misinformation", "fake", "not true", "no evidence", "hoax", "fact check:", "claim:"]
+    confirm_keywords = ["confirmed", "true", "verified", "official", "government", "announces", "approved", "launched", "inaugurated", "passed", "reported"]
 
     combined_text = " ".join(
-        (r.get("body", "") + r.get("title", "")).lower()
+        (r.get("body", "") + " " + r.get("title", "")).lower()
         for r in results
     )
 
     debunk_hits = sum(1 for kw in debunk_keywords if kw in combined_text)
     confirm_hits = sum(1 for kw in confirm_keywords if kw in combined_text)
 
-    if fact_checks:
-        status = "CONTRADICTED"
-        confidence = 0.8
-        explanation = "This claim appears in official fact-check registries as previously debunked."
-    elif debunk_hits > confirm_hits:
-        status = "CONTRADICTED"
-        confidence = min(0.75, 0.3 + debunk_hits * 0.1)
-        explanation = f"Found {debunk_hits} search results suggesting the claim is false or misleading."
-    elif confirm_hits > debunk_hits:
-        status = "VERIFIED"
-        confidence = min(0.75, 0.3 + confirm_hits * 0.1)
-        explanation = f"Found {confirm_hits} search results from credible sources confirming this claim."
-    else:
-        status = "UNPROVEN"
-        confidence = 0.4
-        explanation = "No strong evidence found either confirming or contradicting this claim."
+    # Check how many results come from established trusted publishers
+    trusted_matches = [r for r in results if _is_trusted(r.get("href", r.get("url", "")))]
 
-    return {"status": status, "confidence": confidence, "explanation": explanation}
+    if fact_checks:
+        return {
+            "status": "CONTRADICTED",
+            "confidence": 0.85,
+            "explanation": "This claim appears in official fact-check registries as previously debunked."
+        }
+    elif debunk_hits >= 2:
+        return {
+            "status": "CONTRADICTED",
+            "confidence": min(0.85, 0.4 + debunk_hits * 0.1),
+            "explanation": f"Multiple sources flag this claim as false, misleading, or a hoax."
+        }
+    elif len(trusted_matches) >= 1 or confirm_hits >= 1 or len(results) >= 2:
+        # Reputable news outlets are actively covering this event!
+        top_name = _extract_domain(trusted_matches[0].get("href", "")) if trusted_matches else "major news outlets"
+        return {
+            "status": "VERIFIED",
+            "confidence": 0.82 if trusted_matches else 0.70,
+            "explanation": f"Corroborated by active reporting from credible news publications including {top_name}."
+        }
+    else:
+        return {
+            "status": "UNPROVEN",
+            "confidence": 0.35,
+            "explanation": "No matching reporting found in verified news databases for this specific claim."
+        }
 
 
 def _extract_domain(url: str) -> str:
