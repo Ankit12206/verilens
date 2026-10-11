@@ -3,7 +3,7 @@
    Handles tab switching, API calls, and dynamic UI rendering.
 ═══════════════════════════════════════════════════════════════ */
 
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = window.location.origin;
 
 // ─── Sample Test Data ──────────────────────────────────────────────────────────
 const SAMPLES = {
