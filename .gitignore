@@ -1,0 +1,28 @@
+# Virtual Environment
+venv/
+backend/venv/
+env/
+.venv/
+
+# Environment Variables & Secrets (CRITICAL: Never commit API keys!)
+.env
+backend/.env
+*.env
+
+# Python Cache & Bytecode
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# SQLite Database
+*.db
+backend/*.db
+verilens.db
+
+# OS / Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,182 @@
+/* ─── VeriLens Custom Styles ─────────────────────────────────────────── */
+
+* { box-sizing: border-box; }
+
+/* Tab Buttons */
+.tab-btn {
+  color: #9ca3af;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+}
+.tab-btn.active {
+  background: #1d4ed8;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+}
+.tab-btn:hover:not(.active) {
+  color: #e2e8f0;
+  background: #1f2937;
+}
+
+/* Analyze Button */
+.analyze-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #0ea5e9, #7c3aed);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.01em;
+}
+.analyze-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.35);
+}
+.analyze-btn:active {
+  transform: translateY(0);
+}
+
+/* Sample Buttons */
+.sample-btn {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid #374151;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.sample-btn:hover {
+  border-color: #60a5fa;
+  color: #93c5fd;
+  background: #1e3a5f22;
+}
+
+/* Claim Cards */
+.claim-card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 16px;
+  transition: border-color 0.2s;
+}
+.claim-card:hover { border-color: #374151; }
+
+.claim-card.VERIFIED   { border-left: 4px solid #22c55e; }
+.claim-card.CONTRADICTED { border-left: 4px solid #ef4444; }
+.claim-card.UNPROVEN   { border-left: 4px solid #f59e0b; }
+
+/* Status Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: 'JetBrains Mono', monospace;
+}
+.badge-VERIFIED     { background: #14532d; color: #4ade80; border: 1px solid #166534; }
+.badge-CONTRADICTED { background: #450a0a; color: #f87171; border: 1px solid #991b1b; }
+.badge-UNPROVEN     { background: #451a03; color: #fbbf24; border: 1px solid #92400e; }
+
+/* Verdict Badge */
+.verdict-AUTHENTIC        { background: #14532d22; color: #4ade80; border-color: #166534; }
+.verdict-MOSTLY_TRUE      { background: #052e1622; color: #6ee7b7; border-color: #065f46; }
+.verdict-MISLEADING       { background: #451a0322; color: #fbbf24; border-color: #92400e; }
+.verdict-CONTRADICTED     { background: #450a0a22; color: #f87171; border-color: #991b1b; }
+.verdict-CONTEXT_HIJACKED { background: #3b082222; color: #f472b6; border-color: #9d174d; }
+.verdict-UNVERIFIED       { background: #1f293722; color: #9ca3af; border-color: #374151; }
+
+/* Score Ring Colors */
+.ring-high   { stroke: #22c55e; }
+.ring-medium { stroke: #f59e0b; }
+.ring-low    { stroke: #ef4444; }
+
+/* Loading Bar Animation */
+.loading-bar {
+  width: 0%;
+  animation: loadprogress 3s ease-in-out infinite;
+}
+@keyframes loadprogress {
+  0%   { width: 5%; }
+  50%  { width: 80%; }
+  90%  { width: 95%; }
+  100% { width: 5%; }
+}
+
+/* Narrative Perspective Cards */
+.perspective-card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 16px;
+}
+.perspective-card.viral    { border-top: 3px solid #f87171; }
+.perspective-card.mainstream { border-top: 3px solid #60a5fa; }
+.perspective-card.official { border-top: 3px solid #4ade80; }
+
+/* Confidence Bar */
+.confidence-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #ef4444, #f59e0b, #22c55e);
+  transition: width 0.8s ease;
+}
+
+/* Image verification alert */
+.hijack-alert {
+  background: linear-gradient(135deg, #450a0a44, #3b082244);
+  border: 1px solid #f472b6;
+  border-radius: 12px;
+  padding: 14px;
+}
+.safe-alert {
+  background: #052e1622;
+  border: 1px solid #166534;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+/* History items */
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.history-item:hover { border-color: #374151; }
+
+/* Citation links */
+.citation-link {
+  font-size: 0.72rem;
+  color: #60a5fa;
+  text-decoration: underline;
+  word-break: break-all;
+  display: block;
+  margin-top: 3px;
+}
+.citation-link:hover { color: #93c5fd; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0a0f1a; }
+::-webkit-scrollbar-thumb { background: #374151; border-radius: 3px; }
