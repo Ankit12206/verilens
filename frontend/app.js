@@ -26,19 +26,22 @@ async function checkAPIHealth() {
     const resp = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(5000) });
     if (resp.ok) {
       const data = await resp.json();
-      const gemini = data.gemini_available;
-      const openrouter = data.openrouter_available;
-      let modelLabel = "Fallback Mode";
-      if (gemini && openrouter) {
-        modelLabel = "Dual AI (Gemini + OpenRouter) ✓";
-      } else if (gemini) {
-        modelLabel = "Gemini ✓";
-      } else if (openrouter) {
-        modelLabel = "OpenRouter ✓";
+      const activeEngines = [];
+      if (data.gemini_available) activeEngines.push("Gemini");
+      if (data.openrouter_available) activeEngines.push("OpenRouter");
+      if (data.fact_check_api_available) activeEngines.push("Google FactCheck");
+      if (data.serpapi_available) activeEngines.push("SerpAPI");
+
+      let badgeText = "Fallback Mode";
+      if (activeEngines.length > 1) {
+        badgeText = `Multi-API (${activeEngines.join(" + ")}) ✓`;
+      } else if (activeEngines.length === 1) {
+        badgeText = `${activeEngines[0]} ✓`;
       }
+
       statusEl.innerHTML = `
         <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-        <span class="text-green-400 text-sm">API Online · ${modelLabel}</span>
+        <span class="text-green-400 text-sm">API Online · ${badgeText}</span>
       `;
     } else {
       throw new Error("API returned error");
