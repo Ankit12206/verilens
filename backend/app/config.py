@@ -9,11 +9,13 @@ load_dotenv()
 
 # ─── AI & Search ──────────────────────────────────────────────────────────────
 GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
+OPENROUTER_API_KEY: str = os.getenv("OPENROUTER_API_KEY", "")
 SERPAPI_KEY: str = os.getenv("SERPAPI_KEY", "")
 GOOGLE_FACT_CHECK_API_KEY: str = os.getenv("GOOGLE_FACT_CHECK_API_KEY", "")
 
 # ─── Feature Flags ────────────────────────────────────────────────────────────
 USE_GEMINI: bool = bool(GEMINI_API_KEY and GEMINI_API_KEY != "your_gemini_api_key_here")
+USE_OPENROUTER: bool = bool(OPENROUTER_API_KEY and OPENROUTER_API_KEY != "your_openrouter_api_key_here")
 USE_SERPAPI: bool = bool(SERPAPI_KEY)
 USE_GOOGLE_FACT_CHECK: bool = bool(GOOGLE_FACT_CHECK_API_KEY)
 

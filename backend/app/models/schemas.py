@@ -98,6 +98,7 @@ class TrustReport(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     gemini_available: bool
+    openrouter_available: bool
     duckduckgo_available: bool
     fact_check_api_available: bool
     serpapi_available: bool

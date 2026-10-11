@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
-from app.config import USE_GEMINI, USE_SERPAPI, USE_GOOGLE_FACT_CHECK
+from app.config import USE_GEMINI, USE_OPENROUTER, USE_SERPAPI, USE_GOOGLE_FACT_CHECK
 from app.database.db import get_db, init_db
 from app.database.models import AnalysisRecord
 from app.models.schemas import (
@@ -108,6 +108,7 @@ def health_check():
     return HealthResponse(
         status="ok",
         gemini_available=USE_GEMINI,
+        openrouter_available=USE_OPENROUTER,
         duckduckgo_available=True,
         fact_check_api_available=USE_GOOGLE_FACT_CHECK,
         serpapi_available=USE_SERPAPI

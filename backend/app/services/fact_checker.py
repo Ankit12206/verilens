@@ -11,7 +11,8 @@ from typing import List, Optional
 from ddgs import DDGS
 from app.config import (
     USE_GEMINI, GOOGLE_FACT_CHECK_API_KEY,
-    USE_GOOGLE_FACT_CHECK, GEMINI_API_KEY
+    USE_GOOGLE_FACT_CHECK, GEMINI_API_KEY,
+    USE_OPENROUTER, OPENROUTER_API_KEY
 )
 
 if USE_GEMINI:
@@ -126,13 +127,94 @@ def verify_claim(claim: str) -> dict:
         for r in search_results[:5]
     )
 
+    # 4. Synthesize verdict using Dual-Model Consensus (Gemini + OpenRouter) or fallback
+    gemini_res = None
+    openrouter_res = None
+
     if USE_GEMINI and _client and search_results:
-        verdict = _gemini_verdict(claim, results_text)
+        gemini_res = _gemini_verdict(claim, results_text)
+
+    if USE_OPENROUTER and search_results:
+        openrouter_res = _openrouter_verdict(claim, results_text)
+
+    # 5. Consensus Arbiter
+    if gemini_res and openrouter_res:
+        verdict = _compute_consensus(gemini_res, openrouter_res)
+    elif gemini_res:
+        verdict = gemini_res
+    elif openrouter_res:
+        verdict = openrouter_res
     else:
         verdict = _fallback_verdict(claim, search_results, fact_check_hits)
 
     verdict["citations"] = citations
     return verdict
+
+
+def _openrouter_verdict(claim: str, results_text: str) -> Optional[dict]:
+    """Query OpenRouter (e.g. Meta Llama 3) for independent verification."""
+    try:
+        prompt = _VERDICT_PROMPT.format(claim=claim, results=results_text)
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "HTTP-Referer": "https://verilens.onrender.com",
+            "X-Title": "VeriLens AI",
+            "Content-Type": "application/json"
+        }
+        # Use OpenRouter's popular free or high-speed models
+        payload = {
+            "model": "meta-llama/llama-3.3-70b-instruct:free",
+            "messages": [
+                {"role": "system", "content": "You are an objective fact-checking system. Respond ONLY in valid JSON."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.2
+        }
+        resp = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload, timeout=15)
+        if resp.status_code == 200:
+            data = resp.json()
+            raw = data["choices"][0]["message"]["content"].strip()
+            raw = re.sub(r"^```(?:json)?\n?", "", raw)
+            raw = re.sub(r"\n?```$", "", raw)
+            return json.loads(raw)
+    except Exception as e:
+        print(f"[FactChecker] OpenRouter query error: {e}")
+    return None
+
+
+def _compute_consensus(gemini_res: dict, openrouter_res: dict) -> dict:
+    """Evaluates consensus between Google Gemini and Meta Llama (via OpenRouter)."""
+    status_g = gemini_res.get("status", "UNPROVEN")
+    status_o = openrouter_res.get("status", "UNPROVEN")
+
+    conf_g = float(gemini_res.get("confidence", 0.6))
+    conf_o = float(openrouter_res.get("confidence", 0.6))
+
+    if status_g == status_o:
+        # Both models agree! Boost confidence
+        boosted_conf = min(0.98, max(conf_g, conf_o) + 0.15)
+        explanation = (
+            f"[Consensus Verified] Both Google Gemini and Meta Llama independently agreed on '{status_g}'. "
+            f"{gemini_res.get('explanation', '')}"
+        )
+        return {
+            "status": status_g,
+            "confidence": boosted_conf,
+            "explanation": explanation,
+            "consensus": "UNANIMOUS"
+        }
+    else:
+        # Conflict between models
+        explanation = (
+            f"[Divided Consensus] Google Gemini assessed as '{status_g}', while Meta Llama assessed as '{status_o}'. "
+            f"Ground truth may be evolving or contested. {gemini_res.get('explanation', '')}"
+        )
+        return {
+            "status": "UNPROVEN",
+            "confidence": 0.5,
+            "explanation": explanation,
+            "consensus": "DIVIDED"
+        }
 
 
 def _gemini_verdict(claim: str, results_text: str) -> dict:

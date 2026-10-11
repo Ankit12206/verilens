@@ -6,8 +6,9 @@ when no API key is configured.
 """
 import json
 import re
+import requests
 from typing import Optional
-from app.config import GEMINI_API_KEY, USE_GEMINI
+from app.config import GEMINI_API_KEY, USE_GEMINI, OPENROUTER_API_KEY, USE_OPENROUTER
 
 # ─── Gemini Setup (new google-genai SDK) ─────────────────────────────────────
 if USE_GEMINI:
@@ -56,13 +57,23 @@ def extract_claims(text: str, headline: Optional[str] = None) -> dict:
     """
     full_text = f"HEADLINE: {headline}\n\nBODY: {text}" if headline else text
 
+    # 1. Try Gemini
     if USE_GEMINI and _client:
-        return _gemini_extract(full_text)
-    else:
-        return _fallback_extract(full_text)
+        gemini_result = _gemini_extract(full_text)
+        if gemini_result:
+            return gemini_result
+
+    # 2. Failover to OpenRouter if Gemini is rate-limited or unavailable
+    if USE_OPENROUTER:
+        openrouter_result = _openrouter_extract(full_text)
+        if openrouter_result:
+            return openrouter_result
+
+    # 3. Deterministic rule-based fallback
+    return _fallback_extract(full_text)
 
 
-def _gemini_extract(text: str) -> dict:
+def _gemini_extract(text: str) -> Optional[dict]:
     """Use Gemini API to extract structured claims."""
     try:
         prompt = _CLAIM_PROMPT.format(text=text[:4000])  # Limit input size
@@ -71,16 +82,42 @@ def _gemini_extract(text: str) -> dict:
             contents=prompt
         )
         raw = response.text.strip()
-
-        # Strip markdown code block wrappers if present
         raw = re.sub(r"^```(?:json)?\n?", "", raw)
         raw = re.sub(r"\n?```$", "", raw)
-
-        result = json.loads(raw)
-        return result
+        return json.loads(raw)
     except (json.JSONDecodeError, Exception) as e:
-        print(f"[ClaimExtractor] Gemini error: {e}, using fallback.")
-        return _fallback_extract(text)
+        print(f"[ClaimExtractor] Gemini error/quota: {e}")
+        return None
+
+
+def _openrouter_extract(text: str) -> Optional[dict]:
+    """Use OpenRouter (Meta Llama 3) to extract structured claims."""
+    try:
+        prompt = _CLAIM_PROMPT.format(text=text[:4000])
+        headers = {
+            "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+            "HTTP-Referer": "https://verilens.onrender.com",
+            "X-Title": "VeriLens AI",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "model": "meta-llama/llama-3.3-70b-instruct:free",
+            "messages": [
+                {"role": "system", "content": "You are a professional fact-checking assistant. Respond ONLY in valid JSON."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.2
+        }
+        resp = requests.post("https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload, timeout=15)
+        if resp.status_code == 200:
+            data = resp.json()
+            raw = data["choices"][0]["message"]["content"].strip()
+            raw = re.sub(r"^```(?:json)?\n?", "", raw)
+            raw = re.sub(r"\n?```$", "", raw)
+            return json.loads(raw)
+    except Exception as e:
+        print(f"[ClaimExtractor] OpenRouter error: {e}")
+    return None
 
 
 def _fallback_extract(text: str) -> dict:

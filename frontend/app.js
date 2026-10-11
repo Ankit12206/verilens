@@ -27,9 +27,18 @@ async function checkAPIHealth() {
     if (resp.ok) {
       const data = await resp.json();
       const gemini = data.gemini_available;
+      const openrouter = data.openrouter_available;
+      let modelLabel = "Fallback Mode";
+      if (gemini && openrouter) {
+        modelLabel = "Dual AI (Gemini + OpenRouter) ✓";
+      } else if (gemini) {
+        modelLabel = "Gemini ✓";
+      } else if (openrouter) {
+        modelLabel = "OpenRouter ✓";
+      }
       statusEl.innerHTML = `
         <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-        <span class="text-green-400 text-sm">API Online ${gemini ? '· Gemini ✓' : '· Fallback Mode'}</span>
+        <span class="text-green-400 text-sm">API Online · ${modelLabel}</span>
       `;
     } else {
       throw new Error("API returned error");
