@@ -71,9 +71,10 @@
 }
 .claim-card:hover { border-color: #374151; }
 
-.claim-card.VERIFIED   { border-left: 4px solid #22c55e; }
+.claim-card.VERIFIED     { border-left: 4px solid #22c55e; }
+.claim-card.HALF_TRUE    { border-left: 4px solid #f59e0b; }
 .claim-card.CONTRADICTED { border-left: 4px solid #ef4444; }
-.claim-card.UNPROVEN   { border-left: 4px solid #f59e0b; }
+.claim-card.UNPROVEN     { border-left: 4px solid #f59e0b; }
 
 /* Status Badges */
 .badge {
@@ -89,16 +90,19 @@
   font-family: 'JetBrains Mono', monospace;
 }
 .badge-VERIFIED     { background: #14532d; color: #4ade80; border: 1px solid #166534; }
+.badge-HALF_TRUE    { background: #451a03; color: #fbbf24; border: 1px solid #d97706; }
 .badge-CONTRADICTED { background: #450a0a; color: #f87171; border: 1px solid #991b1b; }
 .badge-UNPROVEN     { background: #451a03; color: #fbbf24; border: 1px solid #92400e; }
 
 /* Verdict Badge */
-.verdict-AUTHENTIC        { background: #14532d22; color: #4ade80; border-color: #166534; }
-.verdict-MOSTLY_TRUE      { background: #052e1622; color: #6ee7b7; border-color: #065f46; }
-.verdict-MISLEADING       { background: #451a0322; color: #fbbf24; border-color: #92400e; }
-.verdict-CONTRADICTED     { background: #450a0a22; color: #f87171; border-color: #991b1b; }
-.verdict-CONTEXT_HIJACKED { background: #3b082222; color: #f472b6; border-color: #9d174d; }
-.verdict-UNVERIFIED       { background: #1f293722; color: #9ca3af; border-color: #374151; }
+.verdict-AUTHENTIC          { background: #14532d33; color: #4ade80; border-color: #166534; }
+.verdict-MOSTLY_TRUE        { background: #052e1633; color: #6ee7b7; border-color: #065f46; }
+.verdict-HALF_TRUTH         { background: #451a0344; color: #fbbf24; border-color: #d97706; }
+.verdict-MISLEADING         { background: #451a0333; color: #fbbf24; border-color: #92400e; }
+.verdict-CONTRADICTED       { background: #450a0a33; color: #f87171; border-color: #991b1b; }
+.verdict-CONTEXT_HIJACKED   { background: #3b082233; color: #f472b6; border-color: #9d174d; }
+.verdict-AI_GENERATED_IMAGE { background: #2e106544; color: #c084fc; border-color: #7e22ce; }
+.verdict-UNVERIFIED         { background: #1f293733; color: #9ca3af; border-color: #374151; }
 
 /* Score Ring Colors */
 .ring-high   { stroke: #22c55e; }

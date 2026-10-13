@@ -1,6 +1,6 @@
 # encoding: utf-8
 """
-VeriLens - Automated Test Suite
+VeriLens 2.0 - Automated Test Suite
 Run with: python tests/test_pipeline.py
 """
 import sys
@@ -40,36 +40,47 @@ def test_claim_extractor_low_sensationalism_for_factual():
     print(f"  Factual sensationalism score: {score}/10")
 
 
-# ── Test 4: Image verifier returns proper structure ───────────────────────────
+# ── Test 4: Image verifier returns proper VeriLens 2.0 structure ─────────────
 def test_image_verifier_returns_structure():
+    from PIL import Image
+    import io
     from app.services.image_verifier import verify_image
-    result = verify_image(
-        image_url="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Fronalpstock_big.jpg/800px-Fronalpstock_big.jpg"
-    )
-    assert "checked" in result, "Result should have 'checked' field"
+
+    # Create a valid in-memory test image so network thumbnails never 400
+    img = Image.new("RGB", (320, 240), color=(40, 120, 200))
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG")
+    result = verify_image(image_bytes=buf.getvalue(), caption="Test blue sky photo")
+
+    assert result["checked"] is True, "Result should be checked"
     assert "is_context_hijacked" in result, "Result should have 'is_context_hijacked' field"
-    print(f"  Image checked: {result['checked']}, hijacked: {result['is_context_hijacked']}")
+    assert "authenticity_verdict" in result, "Result should have 'authenticity_verdict' (REAL_PHOTO vs AI_GENERATED)"
+    assert "related_incident" in result, "Result should have 'related_incident'"
+    assert "location_taken" in result, "Result should have 'location_taken'"
+    print(f"  Image checked: {result['checked']}, verdict: {result['authenticity_verdict']}, incident: {result['related_incident']}")
 
 
 # ── Test 5: Image verifier handles missing input gracefully ───────────────────
 def test_image_verifier_no_image():
     from app.services.image_verifier import verify_image
     result = verify_image()
-    assert result["checked"] == False, "Should not be checked without input"
+    assert result["checked"] is False, "Should not be checked without input"
     print("  Handles missing image gracefully")
 
 
-# ── Test 6: Credibility score is high when all claims verified ────────────────
+# ── Test 6: Real verified news scores high (85-98, no more 61-62 bug!) ───────
 def test_credibility_score_with_verified_claims():
-    from app.services.narrative_matrix import calculate_credibility_score
+    from app.services.narrative_matrix import calculate_credibility_score, determine_verdict
     from app.models.schemas import ClaimItem
     claims = [
-        ClaimItem(claim="Test", status="VERIFIED", confidence=0.9, explanation="", citations=[]),
-        ClaimItem(claim="Test2", status="VERIFIED", confidence=0.85, explanation="", citations=[]),
+        ClaimItem(claim="Test", status="VERIFIED", confidence=0.92, explanation="", citations=[]),
+        ClaimItem(claim="Test2", status="VERIFIED", confidence=0.88, explanation="", citations=[]),
     ]
     score = calculate_credibility_score(claims, sensationalism_score=2, media_check=None)
-    assert score >= 60, f"All-verified claims should score >=60, got {score}"
-    print(f"  Credibility score (all verified, low sens): {score}/100")
+    verdict = determine_verdict(score, None)
+    assert score >= 85, f"Real verified claims should score >=85 (fixed 61-62 bug), got {score}"
+    assert verdict == "AUTHENTIC", f"Should be AUTHENTIC, got {verdict}"
+    print(f"  Credibility score (real verified news): {score}/100 ({verdict})")
 
 
 # ── Test 7: Credibility score is low when all claims contradicted ─────────────
@@ -85,7 +96,31 @@ def test_credibility_score_with_contradicted_claims():
     print(f"  Credibility score (all contradicted, high sens): {score}/100")
 
 
-# ── Test 8: Context hijack always returns CONTEXT_HIJACKED verdict ────────────
+# ── Test 8: Half-Truth ("True News, But Half") scores 46-68 & HALF_TRUTH ─────
+def test_half_truth_scoring_and_verdict():
+    from app.services.narrative_matrix import calculate_credibility_score, determine_verdict
+    from app.models.schemas import ClaimItem
+    claims = [
+        ClaimItem(claim="Partial truth claim", status="HALF_TRUE", confidence=0.6, explanation="", citations=[]),
+    ]
+    score = calculate_credibility_score(
+        claims,
+        sensationalism_score=5,
+        media_check=None,
+        calibrated_ai_score=56
+    )
+    verdict = determine_verdict(
+        score,
+        media_check=None,
+        is_half_truth=True,
+        deep_verdict_type="HALF_TRUTH"
+    )
+    assert 46 <= score <= 68, f"Half-truth should score 46-68, got {score}"
+    assert verdict == "HALF_TRUTH", f"Verdict should be HALF_TRUTH, got {verdict}"
+    print(f"  Half-truth score: {score}/100, verdict: {verdict}")
+
+
+# ── Test 9: Context hijack always returns CONTEXT_HIJACKED verdict ────────────
 def test_credibility_score_context_hijacked():
     from app.services.narrative_matrix import calculate_credibility_score, determine_verdict
     from app.models.schemas import ClaimItem, MediaVerification
@@ -97,19 +132,68 @@ def test_credibility_score_context_hijacked():
     print(f"  Context hijack verdict correctly assigned: {verdict}")
 
 
-# ── Test 9: DuckDuckGo live search returns results ────────────────────────────
-def test_live_search_returns_results():
-    from app.services.fact_checker import live_search
-    results = live_search("India inflation rate 2024", max_results=3)
+# ── Test 10: DuckDuckGo & Local/YouTube search returns results ────────────────
+def test_live_and_local_youtube_search():
+    from app.services.fact_checker import live_search, search_youtube_and_local_news
+    results = live_search("Reserve Bank of India interest rate", max_results=3)
     assert isinstance(results, list), "Should return a list"
-    print(f"  DuckDuckGo search returned {len(results)} results")
+    local_yt = search_youtube_and_local_news("Reserve Bank of India repo rate", max_results=4)
+    assert isinstance(local_yt, list), "Local/YouTube search should return a list"
+    print(f"  Web search returned {len(results)} results; Local/YouTube returned {len(local_yt)} results")
+
+
+# ── Test 11: Self-Learning Engine stores & recalls facts ─────────────────────
+def test_self_learning_engine():
+    from datetime import datetime, timezone
+    from app.database.db import init_db, SessionLocal
+    from app.models.schemas import TrustReport, ClaimItem, Citation
+    from app.services.learning_engine import learn_from_analysis, recall_relevant_knowledge, get_learning_stats
+
+    init_db()
+    db = SessionLocal()
+    try:
+        sample_text = "The Reserve Bank of India maintained its benchmark repo interest rate at 6.5% in its policy review."
+        dummy_report = TrustReport(
+            id="test-self-learn-001",
+            overall_verdict="AUTHENTIC",
+            credibility_score=94,
+            sensationalism_score=1,
+            coverage_level="HIGH_MAINSTREAM",
+            full_news_explanation="The RBI Monetary Policy Committee kept the policy repo rate unchanged at 6.5%.",
+            facts_and_science_analysis="Central banks use repo rates to control inflation and liquidity.",
+            is_half_truth=False,
+            claims=[
+                ClaimItem(
+                    claim=sample_text,
+                    status="VERIFIED",
+                    confidence=0.95,
+                    explanation="Verified by RBI official press release.",
+                    citations=[Citation(title="RBI MPC Statement", url="https://www.rbi.org.in", source="rbi.org.in")]
+                )
+            ],
+            summary_explanation="Verified RBI news.",
+            analyzed_at=datetime.now(timezone.utc),
+            input_type="text"
+        )
+        meta = learn_from_analysis(dummy_report, sample_text, None, None, db)
+        assert meta.learned_from_this_run is True, "Should record learning"
+
+        recalled = recall_relevant_knowledge(sample_text, db)
+        assert len(recalled["matches"]) >= 1, "Should recall learned fact on second check"
+        assert recalled["matches"][0]["learned_verdict"] == "AUTHENTIC", "Recalled verdict should match"
+
+        stats = get_learning_stats(db)
+        assert stats["total_learned_facts"] >= 1, "Should have at least 1 learned fact in DB"
+        print(f"  Self-Learning Engine verified: {stats['total_learned_facts']} facts, top similarity={recalled['highest_similarity']}")
+    finally:
+        db.close()
 
 
 # ── Main Runner ───────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    print("\n" + "="*55)
-    print("  VeriLens Automated Test Suite")
-    print("="*55)
+    print("\n" + "="*60)
+    print("  VeriLens 2.0 Automated Test Suite")
+    print("="*60)
 
     tests = [
         test_claim_extractor_returns_structure,
@@ -119,8 +203,10 @@ if __name__ == "__main__":
         test_image_verifier_no_image,
         test_credibility_score_with_verified_claims,
         test_credibility_score_with_contradicted_claims,
+        test_half_truth_scoring_and_verdict,
         test_credibility_score_context_hijacked,
-        test_live_search_returns_results
+        test_live_and_local_youtube_search,
+        test_self_learning_engine
     ]
 
     passed = failed = 0
@@ -134,7 +220,7 @@ if __name__ == "__main__":
             print(f"  --> FAILED: {e}")
             failed += 1
 
-    print(f"\n{'='*55}")
+    print(f"\n{'='*60}")
     print(f"  Results: {passed} PASSED | {failed} FAILED out of {len(tests)} tests")
-    print("="*55)
+    print("="*60)
     sys.exit(0 if failed == 0 else 1)
