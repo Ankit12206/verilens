@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIGNAL/TRUTH · VeriLens 2.0 — Neon Trust Intelligence</title>
+  <title>VeriLens — News & Image Trust Intelligence</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Iconify + Lucide Icons -->
@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://api.fontshare.com" />
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=cabinet-grotesk@500,700,800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="stylesheet" href="styles.css?v=6" />
   <script>
     tailwind.config = {
       theme: {
@@ -44,27 +44,26 @@
       <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 md:px-8">
         <a id="nav-brand-link" href="#top" class="flex items-center gap-3 group">
           <span class="flex h-10 w-10 items-center justify-center rounded-lg border border-cyanx/60 bg-cyanx/10 text-cyanx shadow-[0_0_18px_rgba(84,246,239,.25)] transition group-hover:scale-105">
-            <iconify-icon icon="lucide:scan-search" class="text-xl"></iconify-icon>
+            <iconify-icon icon="lucide:shield-check" class="text-xl"></iconify-icon>
           </span>
-          <div>
-            <span class="font-display text-lg font-extrabold tracking-tight">SIGNAL<span class="text-cyanx">/</span>TRUTH</span>
-            <span class="ml-2 rounded border border-cyanx/30 bg-cyanx/10 px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase tracking-widest text-cyanx">VeriLens 2.0</span>
+          <div class="flex items-center">
+            <span class="font-display text-xl font-extrabold tracking-tight">VERI<span class="text-cyanx">LENS</span></span>
           </div>
         </a>
 
         <nav class="hidden lg:flex items-center gap-9 text-[11px] font-bold uppercase tracking-[.2em] text-white/50">
-          <a id="nav-scan-link" href="#scanner" class="transition hover:text-cyanx">Live scanner</a>
+          <a id="nav-scan-link" href="#scanner" class="transition hover:text-cyanx">Scanner</a>
+          <a id="nav-method-link" href="#method" class="transition hover:text-cyanx">How It Works</a>
           <a id="nav-report-link" href="#report" class="transition hover:text-cyanx">Intelligence</a>
-          <a id="nav-method-link" href="#method" class="transition hover:text-cyanx">Methodology</a>
         </nav>
 
         <div class="flex items-center gap-3">
           <div id="learning-pill" class="hidden sm:flex items-center gap-2 rounded-lg border border-pink/40 bg-pink/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-pink">
-            <iconify-icon icon="lucide:brain-circuit" class="text-sm"></iconify-icon>
-            <span id="learning-pill-text">AI Memory: Syncing...</span>
+            <iconify-icon icon="lucide:brain" class="text-sm"></iconify-icon>
+            <span id="learning-pill-text">Memory Active</span>
           </div>
           <a id="nav-access-link" href="#scanner" class="rounded-lg border border-white/15 bg-white/[.02] px-4 py-2 text-[10px] font-bold uppercase tracking-[.18em] text-white/80 transition hover:border-cyanx hover:text-cyanx">
-            Scan Now
+            Start Scan
           </a>
         </div>
       </div>
@@ -87,65 +86,59 @@
         <span class="particle left-[78%] top-[29%]"></span>
       </div>
 
-      <!-- ─── Hero Section (12-Column Signal/Truth Layout) ──────────────────── -->
+      <!-- ─── Hero Section ─────────────────────────────────────────────────── -->
       <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 pb-12 pt-12 md:pt-16 items-center">
         <div class="lg:col-span-7">
-          <div class="mb-6 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[.3em] text-cyanx">
+          <div class="mb-5 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[.3em] text-cyanx">
             <span class="h-px w-10 bg-cyanx"></span>
-            Evidence over emotion · Self-Learning AI 2.0
+            Evidence Over Emotion
           </div>
           <h1 class="max-w-3xl font-display text-5xl sm:text-6xl md:text-7xl font-extrabold leading-[.92] tracking-[-.05em]">
             Know what<br /><span class="text-cyanx">to trust.</span>
           </h1>
-          <p class="mt-6 max-w-2xl text-base md:text-lg leading-relaxed text-white/55">
-            Signal/Truth (<strong class="text-white">VeriLens 2.0</strong>) dissects news and images before they shape your view. Our intelligence engine verifies real facts, exposes <span class="text-orange font-semibold">half-truths with the full story &amp; reader impact</span>, investigates rare events via <span class="text-cyanx font-semibold">local news, YouTube &amp; science</span>, and detects <span class="text-pink font-semibold">AI vs. Real photos with incident &amp; location</span>.
+          <p class="mt-6 max-w-xl text-base md:text-lg leading-relaxed text-white/60">
+            Dissect news, claims, and images before they shape your view. Instant fact-checking, half-truth detection, and AI photo forensics in one search.
           </p>
           <div class="mt-8 flex flex-wrap items-center gap-4">
             <a id="hero-submit-link" href="#scanner" class="group flex items-center gap-3 rounded-xl bg-cyanx px-6 py-4 text-sm font-bold text-ink transition hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(84,246,239,.45)]">
-              Analyze an article or image
+              Analyze News or Photo
               <iconify-icon icon="lucide:arrow-up-right" class="text-lg transition group-hover:rotate-45"></iconify-icon>
             </a>
             <a id="hero-method-link" href="#method" class="flex items-center gap-2 px-4 py-4 text-sm font-medium text-white/60 transition hover:text-white">
-              <iconify-icon icon="lucide:play-circle" class="text-lg text-pink"></iconify-icon>
+              <iconify-icon icon="lucide:help-circle" class="text-lg text-cyanx"></iconify-icon>
               See how it works
             </a>
           </div>
         </div>
 
-        <!-- Pulsing Neon Radar Dial -->
+        <!-- Radar Confidence Dial -->
         <div class="lg:col-span-5 flex items-center justify-center py-4">
-          <div class="relative flex h-64 w-64 items-center justify-center rounded-full border border-cyanx/25 ring">
+          <div class="relative flex h-60 w-60 items-center justify-center rounded-full border border-cyanx/25 ring">
             <div class="absolute inset-4 rounded-full border border-cyanx/20"></div>
-            <div class="absolute inset-10 rounded-full border border-dashed border-pink/40"></div>
+            <div class="absolute inset-10 rounded-full border border-dashed border-cyanx/30"></div>
             <div class="text-center">
               <div class="font-display text-6xl font-bold tracking-[-.06em] text-cyanx">
                 <span id="hero-confidence-number">96</span><span class="text-3xl">%</span>
               </div>
-              <div id="hero-confidence-label" class="mt-1 text-[9px] font-bold uppercase tracking-[.28em] text-white/45">
-                engine confidence
+              <div id="hero-confidence-label" class="mt-1 text-[10px] font-bold uppercase tracking-[.25em] text-white/45">
+                Engine Confidence
               </div>
             </div>
-            <span id="hero-badge-top" class="absolute -right-5 top-10 rounded-md border border-orange/40 bg-orange/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-orange shadow-[0_0_15px_rgba(255,138,61,.18)]">
-              half-truth radar
-            </span>
-            <span id="hero-badge-bottom" class="absolute -bottom-2 left-0 rounded-md border border-pink/40 bg-pink/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-widest text-pink shadow-[0_0_15px_rgba(240,77,186,.18)]">
-              self-learning live
-            </span>
           </div>
         </div>
       </section>
 
-      <!-- ─── 01 / Instant Analysis Scanner Card ────────────────────────────── -->
+      <!-- ─── Scanner Section ──────────────────────────────────────────────── -->
       <section id="scanner" class="glow-cyan rounded-2xl border border-white/10 bg-panel/95 p-5 md:p-7">
         <!-- Scanner Header -->
         <div class="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5">
           <div>
-            <div class="mb-1.5 text-[10px] font-bold uppercase tracking-[.28em] text-cyanx">01 / Instant analysis</div>
-            <h2 class="font-display text-2xl font-bold tracking-tight">Submit news, partial claims, or images for forensic review</h2>
+            <h2 class="font-display text-2xl font-bold tracking-tight">Verify Content</h2>
+            <p class="text-xs text-white/45 mt-1">Enter any headline, article excerpt, or upload an image to analyze.</p>
           </div>
           <div id="api-status" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.18em] text-white/50">
             <span class="h-2 w-2 rounded-full bg-cyanx shadow-[0_0_10px_#54f6ef] animate-pulse"></span>
-            <span>Checking engines...</span>
+            <span>System Active</span>
           </div>
         </div>
 
@@ -153,19 +146,19 @@
         <div class="flex flex-wrap gap-2 mb-6">
           <button onclick="switchTab('text')" id="tab-text" class="tab-btn active px-4 py-2.5 rounded-lg flex items-center gap-2">
             <iconify-icon icon="lucide:file-text" class="text-sm"></iconify-icon>
-            01 · News / Headline
+            News &amp; Text
           </button>
           <button onclick="switchTab('image')" id="tab-image" class="tab-btn px-4 py-2.5 rounded-lg flex items-center gap-2">
             <iconify-icon icon="lucide:scan-eye" class="text-sm"></iconify-icon>
-            02 · Image Forensics &amp; Incident
+            Image Forensics
           </button>
           <button onclick="switchTab('multi')" id="tab-multi" class="tab-btn px-4 py-2.5 rounded-lg flex items-center gap-2">
             <iconify-icon icon="lucide:layers-3" class="text-sm"></iconify-icon>
-            03 · Multimodal Scan
+            Article + Image
           </button>
         </div>
 
-        <!-- 12-Column Scanner Grid: 7 Cols Input Console + 5 Cols Live Telemetry -->
+        <!-- 12-Column Scanner Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
           <!-- LEFT 7 COLS: Active Input Panel -->
@@ -176,42 +169,36 @@
               <div class="mb-3 flex items-center justify-between">
                 <span class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-white/45">
                   <iconify-icon icon="lucide:newspaper" class="text-cyanx text-sm"></iconify-icon>
-                  Article text, headline, or viral claim
+                  Headline or Article Text
                 </span>
                 <button onclick="document.getElementById('text-input').value=''" class="text-[10px] uppercase tracking-wider text-white/30 hover:text-cyanx transition">
-                  Clear ✕
+                  Clear
                 </button>
               </div>
 
               <textarea id="text-input" rows="5"
                 class="w-full rounded-lg border border-cyanx/30 bg-cyanx/[.03] px-4 py-3.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-cyanx focus:bg-cyanx/[.05] resize-none transition"
-                placeholder="Paste a morning newspaper story, a suspicious half-truth, a rare local incident, or a viral rumor..."></textarea>
+                placeholder="Paste a headline, article text, or claim to verify..."></textarea>
 
               <!-- Sample Test Chips -->
               <div class="mt-3.5 flex flex-wrap items-center gap-2">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-white/35 mr-1">Test Cases:</span>
-                <button onclick="loadSample('real')" class="sample-btn">✅ Real Famous News</button>
-                <button onclick="loadSample('half')" class="sample-btn">🌗 Half-Truth Story</button>
-                <button onclick="loadSample('rumor')" class="sample-btn">❌ Fake Viral Rumor</button>
-                <button onclick="loadSample('local_science')" class="sample-btn">🔬 Local &amp; Science Check</button>
+                <span class="text-[10px] font-bold uppercase tracking-widest text-white/35 mr-1">Examples:</span>
+                <button onclick="loadSample('real')" class="sample-btn">Real News</button>
+                <button onclick="loadSample('half')" class="sample-btn">Half-Truth</button>
+                <button onclick="loadSample('rumor')" class="sample-btn">Fake Rumor</button>
+                <button onclick="loadSample('local_science')" class="sample-btn">Science Check</button>
               </div>
 
-              <div class="mt-5 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
-                <span class="text-xs text-white/35">Checks Mainstream, Local Portals, YouTube &amp; Science</span>
+              <div class="mt-5 flex items-center justify-end pt-4 border-t border-white/10">
                 <button onclick="analyzeText()" class="analyze-btn">
-                  Run analysis
+                  Analyze Content
                   <iconify-icon icon="lucide:arrow-right" class="text-base"></iconify-icon>
                 </button>
               </div>
             </div>
 
-            <!-- TAB 2: IMAGE FORENSICS & INCIDENT INPUT -->
+            <!-- TAB 2: IMAGE FORENSICS INPUT -->
             <div id="panel-image" class="tab-panel hidden">
-              <div class="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-2 rounded-lg border border-white/10 bg-white/[.02] p-3 text-xs text-white/60">
-                <div><strong class="text-pink">Task 1 · Real vs. AI:</strong> Detects camera photo vs. AI synthesis.</div>
-                <div><strong class="text-cyanx">Task 2 · Incident &amp; Place:</strong> Finds event, location &amp; date.</div>
-              </div>
-
               <div class="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.2em] text-white/45">
                 <iconify-icon icon="lucide:link" class="text-cyanx"></iconify-icon>
                 Image URL or Upload File
@@ -224,7 +211,7 @@
               <div id="drop-zone" class="border border-dashed border-cyanx/35 bg-cyanx/[.02] rounded-xl p-6 text-center cursor-pointer hover:border-cyanx transition">
                 <iconify-icon icon="lucide:upload-cloud" class="text-3xl text-cyanx mb-1"></iconify-icon>
                 <p class="text-white/70 text-sm">Drag &amp; drop an image here, or <span class="text-cyanx underline cursor-pointer" onclick="document.getElementById('file-input').click()">browse file</span></p>
-                <p class="text-white/35 text-xs mt-1">JPEG, PNG, WebP · Perceptual Hash + Vision AI Forensics</p>
+                <p class="text-white/35 text-xs mt-1">JPEG, PNG, WebP supported</p>
                 <input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)" />
               </div>
 
@@ -234,17 +221,16 @@
 
               <div class="mt-3">
                 <label class="block text-[10px] font-bold uppercase tracking-[.2em] text-white/45 mb-1.5">
-                  Optional Caption / Claim Attached to Image
+                  Optional Caption / Claim
                 </label>
                 <input id="image-caption" type="text"
                   class="w-full rounded-lg border border-white/15 bg-black/40 px-4 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-cyanx transition"
-                  placeholder="Leave blank to identify Real vs. AI + Incident & Location, or paste a caption to check for misuse..." />
+                  placeholder="Add a caption to check for context manipulation..." />
               </div>
 
-              <div class="mt-5 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
-                <span class="text-xs text-white/35">Vision AI + EXIF + Local/YouTube Incident Search</span>
+              <div class="mt-5 flex items-center justify-end pt-4 border-t border-white/10">
                 <button onclick="analyzeImage()" class="analyze-btn">
-                  Scan Image Forensics
+                  Analyze Image
                   <iconify-icon icon="lucide:scan-eye" class="text-base"></iconify-icon>
                 </button>
               </div>
@@ -268,10 +254,9 @@
                 class="w-full rounded-lg border border-white/15 bg-black/40 px-4 py-3 text-sm text-white placeholder-white/30 focus:outline-none focus:border-cyanx transition"
                 placeholder="https://example.com/photo.jpg" />
 
-              <div class="mt-5 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
-                <span class="text-xs text-white/35">Combined Text + Vision AI + Incident Cross-Check</span>
+              <div class="mt-5 flex items-center justify-end pt-4 border-t border-white/10">
                 <button onclick="analyzeMultimodal()" class="analyze-btn">
-                  Run Multimodal Scan
+                  Run Combined Scan
                   <iconify-icon icon="lucide:arrow-right" class="text-base"></iconify-icon>
                 </button>
               </div>
@@ -279,13 +264,13 @@
 
           </div>
 
-          <!-- RIGHT 5 COLS: Latest Scan & Self-Learning Telemetry Card -->
+          <!-- RIGHT 5 COLS: Telemetry & Memory Counters -->
           <div id="report" class="lg:col-span-5 rounded-xl border border-white/10 bg-black/40 p-5 flex flex-col justify-between">
             <div>
               <div class="flex items-center justify-between">
-                <span class="text-[10px] font-bold uppercase tracking-[.2em] text-white/40">Latest scan telemetry</span>
+                <span class="text-[10px] font-bold uppercase tracking-[.2em] text-white/40">Latest Scan</span>
                 <span id="latest-scan-badge" class="rounded-full border border-cyanx/30 bg-cyanx/10 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-cyanx">
-                  Ready to scan
+                  Ready
                 </span>
               </div>
 
@@ -294,40 +279,84 @@
                   <span id="latest-scan-score" class="font-display text-2xl font-bold text-cyanx">96%</span>
                 </div>
                 <div>
-                  <div id="latest-scan-title" class="font-display text-lg font-bold text-white">Calibrated Trust Engine</div>
+                  <div id="latest-scan-title" class="font-display text-lg font-bold text-white">Trust Engine</div>
                   <div id="latest-scan-meta" class="mt-1 text-xs text-white/45 leading-relaxed">
-                    Submit any headline, partial claim, or photo to compute live multi-source evidence points.
+                    Submit any content to run multi-source evidence checks.
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Self-Learning Memory Counters -->
+            <!-- Memory Bank Counters -->
             <div class="mt-6 pt-4 border-t border-white/10">
               <div class="flex items-center justify-between mb-2.5">
                 <span class="text-[10px] font-bold uppercase tracking-[.2em] text-pink flex items-center gap-1.5">
                   <iconify-icon icon="lucide:brain" class="text-sm"></iconify-icon>
-                  Self-Learning Memory Bank
+                  AI Memory Bank
                 </span>
-                <span class="text-[10px] font-mono text-white/40">SQLite RAG Active</span>
+                <span class="text-[10px] font-mono text-white/40">Continuous Learning</span>
               </div>
               <div class="grid grid-cols-3 gap-2 text-center">
                 <div class="rounded-lg border border-white/10 bg-white/[.02] p-2.5">
                   <div id="stat-facts" class="font-display text-lg font-bold text-cyanx">—</div>
-                  <div class="text-[9px] uppercase tracking-wider text-white/40">Learned Facts</div>
+                  <div class="text-[9px] uppercase tracking-wider text-white/40">Facts Learned</div>
                 </div>
                 <div class="rounded-lg border border-white/10 bg-white/[.02] p-2.5">
                   <div id="stat-sources" class="font-display text-lg font-bold text-orange">—</div>
-                  <div class="text-[9px] uppercase tracking-wider text-white/40">Trusted Sources</div>
+                  <div class="text-[9px] uppercase tracking-wider text-white/40">Sources Tracked</div>
                 </div>
                 <div class="rounded-lg border border-white/10 bg-white/[.02] p-2.5">
                   <div id="stat-images" class="font-display text-lg font-bold text-pink">—</div>
-                  <div class="text-[9px] uppercase tracking-wider text-white/40">Image Hashes</div>
+                  <div class="text-[9px] uppercase tracking-wider text-white/40">Images Indexed</div>
                 </div>
               </div>
             </div>
           </div>
 
+        </div>
+      </section>
+
+      <!-- ─── Clean 3-Part "How It Works" Section ───────────────────────────── -->
+      <section id="method" class="pt-16 pb-8">
+        <div class="text-center mb-10">
+          <div class="text-[10px] font-bold uppercase tracking-[.28em] text-cyanx mb-2">Simple &amp; Transparent</div>
+          <h2 class="font-display text-3xl md:text-4xl font-bold">How VeriLens Works</h2>
+          <p class="text-sm text-white/50 max-w-md mx-auto mt-2">A clean three-step process to uncover the signal beneath the noise.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Part 1 -->
+          <div class="rounded-xl border border-white/10 bg-panel/90 p-6 hover:border-cyanx/50 transition">
+            <div class="w-10 h-10 rounded-lg bg-cyanx/10 border border-cyanx/30 flex items-center justify-center text-cyanx font-display font-bold text-lg mb-4">
+              1
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-2">Submit &amp; Scan</h3>
+            <p class="text-sm text-white/55 leading-relaxed">
+              Paste any headline, article excerpt, or upload a photo. VeriLens instantly scans across verified news indexes, regional portals, and video archives.
+            </p>
+          </div>
+
+          <!-- Part 2 -->
+          <div class="rounded-xl border border-white/10 bg-panel/90 p-6 hover:border-orange/50 transition">
+            <div class="w-10 h-10 rounded-lg bg-orange/10 border border-orange/30 flex items-center justify-center text-orange font-display font-bold text-lg mb-4">
+              2
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-2">Deep Analysis</h3>
+            <p class="text-sm text-white/55 leading-relaxed">
+              Evaluates factual evidence, detects if a claim is partially true but missing crucial context, and inspects images for AI generation or misuse.
+            </p>
+          </div>
+
+          <!-- Part 3 -->
+          <div class="rounded-xl border border-white/10 bg-panel/90 p-6 hover:border-pink/50 transition">
+            <div class="w-10 h-10 rounded-lg bg-pink/10 border border-pink/30 flex items-center justify-center text-pink font-display font-bold text-lg mb-4">
+              3
+            </div>
+            <h3 class="font-display text-xl font-bold text-white mb-2">The Whole Truth</h3>
+            <p class="text-sm text-white/55 leading-relaxed">
+              Delivers the complete verified story, clear missing context, a reader impact warning, and a transparent credibility score.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -340,8 +369,8 @@
             <iconify-icon icon="lucide:scan-search" class="absolute inset-0 m-auto w-6 h-6 text-cyanx text-2xl flex items-center justify-center"></iconify-icon>
           </div>
           <div>
-            <p class="font-display text-lg font-bold text-white" id="loading-step">Recalling Self-Learning Memory...</p>
-            <p class="text-white/45 text-xs uppercase tracking-[.18em] mt-1">Scanning Mainstream News · Local Portals · YouTube · Science Facts</p>
+            <p class="font-display text-lg font-bold text-white" id="loading-step">Analyzing Evidence...</p>
+            <p class="text-white/45 text-xs uppercase tracking-[.18em] mt-1">Checking Sources, Context &amp; Facts</p>
           </div>
           <div class="w-64 h-1.5 bg-white/10 rounded-full overflow-hidden">
             <div class="h-full bg-gradient-to-r from-cyanx via-orange to-pink rounded-full loading-bar"></div>
@@ -349,18 +378,18 @@
         </div>
       </div>
 
-      <!-- ─── 02 / Deep Intelligence Report Section (#results) ──────────────── -->
+      <!-- ─── Verification Results Section (#results) ───────────────────────── -->
       <div id="results" class="hidden mt-10 space-y-6">
 
-        <!-- 1. Top Trust Score & Verdict Dossier -->
+        <!-- 1. Top Trust Score & Summary Card -->
         <div class="glow-cyan rounded-2xl border border-white/15 bg-panel/95 p-6 md:p-8">
           <div class="mb-4 flex items-center justify-between">
-            <span class="text-[10px] font-bold uppercase tracking-[.28em] text-cyanx">02 / Forensic Verdict Dossier</span>
+            <h2 class="text-xs font-bold uppercase tracking-[.25em] text-cyanx">Verification Results</h2>
             <span id="analyzed-at" class="font-mono text-xs text-white/40">—</span>
           </div>
 
           <div class="flex flex-col md:flex-row items-center gap-8">
-            <!-- Circular Neon Gauge -->
+            <!-- Circular Gauge -->
             <div class="relative w-36 h-36 shrink-0">
               <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90">
                 <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="11"/>
@@ -391,150 +420,142 @@
               <div class="flex flex-wrap justify-center md:justify-start gap-6 mt-4 pt-3 border-t border-white/10 text-xs text-white/50">
                 <div class="flex items-center gap-2">
                   <iconify-icon icon="lucide:flame" class="text-orange text-base"></iconify-icon>
-                  Emotional Sensationalism: <span id="sensationalism-score" class="font-mono font-bold text-orange ml-1">—/10</span>
+                  Sensationalism: <span id="sensationalism-score" class="font-mono font-bold text-orange ml-1">—/10</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 2. ⚠️ HALF-TRUTH & MISSING CONTEXT ALERT CARD -->
+        <!-- 2. Half-Truth Alert Card -->
         <div id="half-truth-section" class="hidden glow-orange rounded-2xl border-2 border-orange/60 bg-panel/95 p-6">
           <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-xl bg-orange/15 border border-orange/40 flex items-center justify-center shrink-0 text-orange">
               <iconify-icon icon="lucide:alert-octagon" class="text-2xl"></iconify-icon>
             </div>
             <div>
-              <div class="text-[10px] font-bold uppercase tracking-[.25em] text-orange">Partial Truth Detected</div>
-              <h2 class="font-display text-xl font-bold text-white">⚠️ It Is True News, But It Is Only HALF the Story!</h2>
+              <h2 class="font-display text-xl font-bold text-white">⚠️ True News, But Only Half the Story</h2>
+              <p class="text-xs text-white/60 mt-0.5">This report contains a partial truth while omitting critical context.</p>
             </div>
           </div>
           <div class="grid md:grid-cols-2 gap-4">
             <div class="rounded-xl border border-orange/35 bg-black/50 p-4">
               <p class="text-[10px] font-bold uppercase tracking-[.2em] text-orange mb-2">
-                ✓ What Part Is True (The Half-Truth)
+                What Part Is True
               </p>
               <p id="what-is-true-text" class="text-sm text-white/85 leading-relaxed"></p>
             </div>
             <div class="rounded-xl border border-cyanx/40 bg-black/50 p-4">
               <p class="text-[10px] font-bold uppercase tracking-[.2em] text-cyanx mb-2">
-                📖 The Complete Whole News (What Was Left Out)
+                The Missing Context
               </p>
               <p id="missing-context-text" class="text-sm text-white/90 leading-relaxed"></p>
             </div>
           </div>
         </div>
 
-        <!-- 3. 📖 COMPLETE NEWS EXPLANATION CARD -->
+        <!-- 3. Complete News Explanation -->
         <div id="full-news-section" class="hidden rounded-2xl border border-white/10 bg-panel/95 p-6">
-          <div class="mb-2 text-[10px] font-bold uppercase tracking-[.25em] text-cyanx">Complete Context</div>
           <h2 class="font-display text-xl font-bold text-white mb-3 flex items-center gap-2">
             <iconify-icon icon="lucide:newspaper" class="text-cyanx"></iconify-icon>
-            Complete News Explanation &amp; Verified Reality
+            Complete Story &amp; Verified Facts
           </h2>
           <p id="full-news-text" class="text-sm md:text-base text-white/85 leading-relaxed rounded-xl border border-white/10 bg-black/40 p-4"></p>
         </div>
 
-        <!-- 4. ⚡ READER IMPACT & AWARENESS WARNING CARD -->
+        <!-- 4. Reader Impact Warning -->
         <div id="impact-section" class="hidden glow-pink rounded-2xl border border-pink/45 bg-panel/95 p-6">
-          <div class="mb-1 text-[10px] font-bold uppercase tracking-[.25em] text-pink">Psychological &amp; Social Impact</div>
           <h2 class="font-display text-lg font-bold text-white mb-2 flex items-center gap-2">
             <iconify-icon icon="lucide:shield-alert" class="text-pink"></iconify-icon>
-            Reader Impact Warning: What Happens If You Believe This Partial / False News
+            Reader Impact &amp; Awareness
           </h2>
           <p id="impact-text" class="text-sm text-white/85 leading-relaxed"></p>
         </div>
 
-        <!-- 5. 🔬 FACTS & SCIENTIFIC REASONING ANALYSIS CARD -->
+        <!-- 5. Facts & Science Analysis -->
         <div id="science-section" class="hidden rounded-2xl border border-cyanx/35 bg-panel/95 p-6">
-          <div class="mb-1 text-[10px] font-bold uppercase tracking-[.25em] text-cyanx">Scientific &amp; Empirical Grounding</div>
           <h2 class="font-display text-xl font-bold text-white mb-3 flex items-center gap-2">
             <iconify-icon icon="lucide:microscope" class="text-cyanx"></iconify-icon>
-            Facts, Data &amp; Scientific Analysis
+            Facts &amp; Scientific Analysis
           </h2>
           <p id="science-text" class="text-sm text-white/85 leading-relaxed rounded-xl border border-cyanx/20 bg-cyanx/[.04] p-4"></p>
         </div>
 
-        <!-- 6. 🖼️ IMAGE FORENSICS (REAL VS AI) & INCIDENT/LOCATION DOSSIER -->
+        <!-- 6. Image Forensics & Incident Dossier -->
         <div id="media-section" class="hidden rounded-2xl border border-white/10 bg-panel/95 p-6">
-          <div class="mb-1 text-[10px] font-bold uppercase tracking-[.25em] text-pink">Visual Intelligence</div>
           <h2 class="font-display text-xl font-bold text-white mb-4 flex items-center gap-2">
             <iconify-icon icon="lucide:scan-eye" class="text-pink"></iconify-icon>
-            Image Forensics (Real vs. AI) &amp; Incident / Location Dossier
+            Image Authenticity &amp; Incident Details
           </h2>
           <div id="media-content"></div>
         </div>
 
-        <!-- 7. 📡 DISCOVERED LOCAL NEWS WEBSITES & YOUTUBE REPORTS -->
+        <!-- 7. Discovered Sources & Broadcasts -->
         <div id="local-youtube-section" class="hidden rounded-2xl border border-white/10 bg-panel/95 p-6">
-          <div class="mb-1 text-[10px] font-bold uppercase tracking-[.25em] text-orange">Deep Regional &amp; Broadcast Discovery</div>
           <h2 class="font-display text-xl font-bold text-white mb-1 flex items-center gap-2">
             <iconify-icon icon="lucide:radio" class="text-orange"></iconify-icon>
-            Discovered Local News Websites &amp; YouTube Broadcasts
+            Discovered Sources &amp; Broadcasts
           </h2>
-          <p class="text-xs text-white/45 mb-4">Verified coverage found across regional/local digital news portals and YouTube news channels:</p>
+          <p class="text-xs text-white/45 mb-4">Coverage found across news portals and video channels:</p>
           <div id="local-youtube-container" class="grid md:grid-cols-2 gap-3"></div>
         </div>
 
-        <!-- 8. Claim-by-Claim Verification -->
+        <!-- 8. Claim Breakdown -->
         <div id="claims-section" class="hidden">
-          <div class="mb-1 text-[10px] font-bold uppercase tracking-[.25em] text-cyanx">Claim Check</div>
           <h2 class="font-display text-xl font-bold text-white mb-3 flex items-center gap-2">
             <iconify-icon icon="lucide:badge-check" class="text-cyanx"></iconify-icon>
-            Atomic Claim-by-Claim Breakdown
+            Claim Breakdown
           </h2>
           <div id="claims-container" class="space-y-3"></div>
         </div>
 
-        <!-- 9. 360° Narrative Matrix -->
+        <!-- 9. 360° Narrative Perspectives -->
         <div id="narrative-section" class="hidden">
-          <div class="mb-1 text-[10px] font-bold uppercase tracking-[.25em] text-pink">Cross-Spectrum Framing</div>
           <h2 class="font-display text-xl font-bold text-white mb-3 flex items-center gap-2">
             <iconify-icon icon="lucide:git-branch" class="text-pink"></iconify-icon>
-            360° Narrative Matrix
+            Narrative Perspectives
           </h2>
           <div id="narrative-container" class="grid md:grid-cols-3 gap-4"></div>
           <div id="consensus-box" class="mt-4 rounded-xl border border-white/10 bg-black/50 p-4 text-sm text-white/75">
-            <span class="font-bold text-cyanx uppercase tracking-wider text-xs mr-2">Consensus Verdict:</span>
+            <span class="font-bold text-cyanx uppercase tracking-wider text-xs mr-2">Consensus:</span>
             <span id="consensus-text"></span>
           </div>
         </div>
 
-        <!-- 10. 🧠 SELF-LEARNING MEMORY & USER FEEDBACK LOOP -->
+        <!-- 10. Help Improve Accuracy -->
         <div id="learning-section" class="rounded-2xl border border-pink/40 bg-panel/95 p-6">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <div class="text-[10px] font-bold uppercase tracking-[.25em] text-pink mb-1">Continuous Self-Learning Loop</div>
               <h3 class="font-display text-lg font-bold text-white flex items-center gap-2">
-                <iconify-icon icon="lucide:brain-circuit" class="text-pink"></iconify-icon>
-                Autonomous AI Memory &amp; Human Feedback Reinforcement
+                <iconify-icon icon="lucide:brain" class="text-pink"></iconify-icon>
+                Help Improve Accuracy
               </h3>
               <p id="learning-status-text" class="text-xs text-white/55 mt-1"></p>
             </div>
             <div class="flex flex-wrap items-center gap-2.5">
               <button onclick="sendFeedback(true)" id="btn-feedback-good" class="px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-cyanx/15 hover:bg-cyanx/25 text-cyanx border border-cyanx/40 transition flex items-center gap-1.5">
-                <iconify-icon icon="lucide:thumbs-up"></iconify-icon> Accurate (+Reinforce AI)
+                <iconify-icon icon="lucide:thumbs-up"></iconify-icon> Accurate
               </button>
               <button onclick="toggleCorrectionBox()" class="px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-orange/15 hover:bg-orange/25 text-orange border border-orange/40 transition flex items-center gap-1.5">
-                <iconify-icon icon="lucide:graduation-cap"></iconify-icon> Teach / Correct AI
+                <iconify-icon icon="lucide:edit-3"></iconify-icon> Submit Correction
               </button>
             </div>
           </div>
 
           <!-- Inline Correction Form -->
           <div id="correction-box" class="hidden mt-4 pt-4 border-t border-white/10 space-y-3">
-            <p class="text-xs text-white/70">Teach Signal/Truth (VeriLens 2.0) the correct verdict and missing facts so it permanently remembers for future checks:</p>
+            <p class="text-xs text-white/70">Submit a correction to improve future analyses:</p>
             <div class="flex flex-wrap gap-3">
               <select id="correction-verdict" class="bg-black/60 border border-white/15 rounded-lg px-3 py-2.5 text-xs text-white focus:border-cyanx focus:outline-none">
-                <option value="AUTHENTIC">Should be: ✅ Real News (AUTHENTIC)</option>
-                <option value="HALF_TRUTH">Should be: ⚠️ Half-Truth (HALF_TRUTH)</option>
-                <option value="CONTRADICTED">Should be: ❌ Fake News (CONTRADICTED)</option>
-                <option value="AI_GENERATED_IMAGE">Should be: 🤖 AI-Generated Image</option>
+                <option value="AUTHENTIC">Real News (AUTHENTIC)</option>
+                <option value="HALF_TRUTH">Half-Truth (HALF_TRUTH)</option>
+                <option value="CONTRADICTED">Fake News (CONTRADICTED)</option>
+                <option value="AI_GENERATED_IMAGE">AI-Generated Image</option>
               </select>
-              <input id="correction-text" type="text" placeholder="Enter the real facts or correction for the AI to learn..."
+              <input id="correction-text" type="text" placeholder="Enter the correct facts or notes..."
                 class="flex-1 min-w-[240px] bg-black/60 border border-white/15 rounded-lg px-3.5 py-2.5 text-xs text-white focus:border-cyanx focus:outline-none" />
               <button onclick="sendFeedback(false)" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-pink hover:opacity-90 text-ink transition">
-                Save Lesson to AI Memory
+                Save
               </button>
             </div>
           </div>
@@ -543,51 +564,15 @@
 
       </div>
 
-      <!-- ─── 03 / Methodology Cards (#method) ──────────────────────────────── -->
-      <section id="method" class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-10">
-        <div class="rounded-xl border border-white/10 bg-panel/80 p-6 transition hover:border-cyanx/50">
-          <div class="mb-6 flex justify-between items-center">
-            <span class="text-[10px] font-bold tracking-[.25em] text-cyanx uppercase">01 · Source Trace</span>
-            <iconify-icon icon="lucide:waypoints" class="text-xl text-cyanx"></iconify-icon>
-          </div>
-          <h3 class="font-display text-xl font-bold">Mainstream, Local &amp; YouTube</h3>
-          <p class="mt-2 text-sm leading-6 text-white/45">
-            Maps national press, regional/local news portals, and YouTube broadcasts—even when a story exists in very low numbers online.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-white/10 bg-panel/80 p-6 transition hover:border-orange/50">
-          <div class="mb-6 flex justify-between items-center">
-            <span class="text-[10px] font-bold tracking-[.25em] text-orange uppercase">02 · Half-Truth &amp; Science</span>
-            <iconify-icon icon="lucide:badge-check" class="text-xl text-orange"></iconify-icon>
-          </div>
-          <h3 class="font-display text-xl font-bold">Full Story &amp; Reader Impact</h3>
-          <p class="mt-2 text-sm leading-6 text-white/45">
-            Detects when true news only tells half the story, supplies the missing context, warns of reader impact, and validates claims with science.
-          </p>
-        </div>
-
-        <div class="rounded-xl border border-white/10 bg-panel/80 p-6 transition hover:border-pink/50">
-          <div class="mb-6 flex justify-between items-center">
-            <span class="text-[10px] font-bold tracking-[.25em] text-pink uppercase">03 · Vision &amp; Memory Layer</span>
-            <iconify-icon icon="lucide:layers-3" class="text-xl text-pink"></iconify-icon>
-          </div>
-          <h3 class="font-display text-xl font-bold">Real vs. AI + Self-Learning</h3>
-          <p class="mt-2 text-sm leading-6 text-white/45">
-            Identifies AI-generated vs. real photos, pinpoints the exact incident &amp; location, and learns from every analysis in SQLite memory.
-          </p>
-        </div>
-      </section>
-
     </main>
 
     <!-- ─── Footer ──────────────────────────────────────────────────────────── -->
     <footer class="border-t border-white/10 py-6 text-center text-xs text-white/35">
-      <p>SIGNAL<span class="text-cyanx">/</span>TRUTH · VeriLens 2.0 — Self-Learning Disinformation, Half-Truth &amp; Vision Forensics Engine</p>
+      <p>VeriLens — Multimodal Fact-Checking &amp; Trust Intelligence Engine</p>
     </footer>
 
   </div>
 
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

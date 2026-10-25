@@ -1,11 +1,11 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   SIGNAL/TRUTH · VeriLens 2.0 – Frontend Application Logic
-   Neon Trust Intelligence UI + Full VeriLens 2.0 Capabilities:
-   - Calibrated 90–98% Real News Verification & Full Story Explanation
-   - Half-Truth ("True News, But Half") Detection & Reader Impact Warning
+   VeriLens – Frontend Application Logic
+   Clean Trust Intelligence:
+   - Real News Verification & Full Story Explanation
+   - Half-Truth ("True News, But Half") Detection & Reader Impact
    - Low-Coverage Local News Websites + YouTube + Science Analysis
    - Image Forensics (Real Photo vs. AI-Generated + Incident & Location)
-   - Continuous Self-Learning Memory & User Teaching Feedback
+   - Continuous Memory Bank & User Feedback Loop
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const API_BASE = window.location.origin;
@@ -35,23 +35,9 @@ async function checkAPIHealth() {
   try {
     const resp = await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(6000) });
     if (resp.ok) {
-      const data = await resp.json();
-      const activeEngines = [];
-      if (data.gemini_available) activeEngines.push("Gemini");
-      if (data.openrouter_available) activeEngines.push("OpenRouter");
-      if (data.fact_check_api_available) activeEngines.push("FactCheck");
-      if (data.serpapi_available) activeEngines.push("SerpAPI");
-
-      let badgeText = "Fallback Mode";
-      if (activeEngines.length > 1) {
-        badgeText = `System Operational · ${activeEngines.join(" + ")}`;
-      } else if (activeEngines.length === 1) {
-        badgeText = `System Operational · ${activeEngines[0]}`;
-      }
-
       statusEl.innerHTML = `
         <span class="h-2 w-2 rounded-full bg-cyanx shadow-[0_0_10px_#54f6ef]"></span>
-        <span class="text-cyanx">${badgeText}</span>
+        <span class="text-cyanx">System Active</span>
       `;
     } else {
       throw new Error("API returned error");
@@ -59,7 +45,7 @@ async function checkAPIHealth() {
   } catch {
     statusEl.innerHTML = `
       <span class="h-2 w-2 rounded-full bg-pink shadow-[0_0_10px_#f04dba] animate-pulse"></span>
-      <span class="text-pink">API Offline – Start backend</span>
+      <span class="text-pink">Offline</span>
     `;
   }
 }
@@ -83,7 +69,7 @@ async function loadLearningStats() {
       if (pill && pillText) {
         pill.classList.remove("hidden");
         pill.classList.add("flex");
-        pillText.textContent = `AI Memory: ${totalFacts} Facts · ${totalDomains} Sources`;
+        pillText.textContent = `Memory Active: ${totalFacts} Facts`;
       }
       if (statFacts) statFacts.textContent = totalFacts;
       if (statSources) statSources.textContent = totalDomains;
@@ -149,7 +135,7 @@ function setupDragDrop() {
 }
 
 // ─── Show / Hide UI States ─────────────────────────────────────────────────────
-function showLoading(step = "Recalling Self-Learning Memory...") {
+function showLoading(step = "Analyzing Evidence...") {
   document.getElementById("loading").classList.remove("hidden");
   document.getElementById("results").classList.add("hidden");
   document.getElementById("loading-step").textContent = step;
@@ -168,11 +154,11 @@ function updateLoadingStep(step) {
 // ─── API Calls ────────────────────────────────────────────────────────────────
 async function analyzeText() {
   const text = document.getElementById("text-input").value.trim();
-  if (text.length < 10) return alert("Please enter at least 10 characters of news or claim text.");
+  if (text.length < 10) return alert("Please enter at least 10 characters of text to analyze.");
 
-  showLoading("Checking Self-Learning Memory & Extracting Claims...");
-  const t1 = setTimeout(() => updateLoadingStep("Searching Mainstream News, Local Portals & YouTube..."), 1600);
-  const t2 = setTimeout(() => updateLoadingStep("Analyzing Completeness (Full Truth vs. Half-Truth) & Science..."), 3800);
+  showLoading("Checking Evidence & Extracting Claims...");
+  const t1 = setTimeout(() => updateLoadingStep("Searching News, Local Portals & YouTube..."), 1600);
+  const t2 = setTimeout(() => updateLoadingStep("Evaluating Truth, Context & Science..."), 3800);
 
   try {
     const resp = await fetch(`${API_BASE}/api/analyze-text`, {
@@ -201,9 +187,9 @@ async function analyzeImage() {
 
   if (!imageUrl && !selectedFile) return alert("Please provide an image URL or upload an image file.");
 
-  showLoading("Stage 1: Running Vision AI Forensics (Real Photo vs. AI-Generated)...");
-  const t1 = setTimeout(() => updateLoadingStep("Stage 2: Identifying Incident, Location & Date..."), 2000);
-  const t2 = setTimeout(() => updateLoadingStep("Stage 3: Cross-Checking News Websites & YouTube..."), 4500);
+  showLoading("Inspecting Image Authenticity & Forensics...");
+  const t1 = setTimeout(() => updateLoadingStep("Identifying Incident, Location & Date..."), 2000);
+  const t2 = setTimeout(() => updateLoadingStep("Cross-Checking News Archives..."), 4500);
 
   try {
     const formData = new FormData();
@@ -233,9 +219,9 @@ async function analyzeMultimodal() {
 
   if (text.length < 10) return alert("Please enter article text or headline.");
 
-  showLoading("Running Complete Multimodal Verification...");
-  const t1 = setTimeout(() => updateLoadingStep("Checking News Truth, Half-Truth & Science..."), 1800);
-  const t2 = setTimeout(() => updateLoadingStep("Verifying Image Authenticity & Incident Location..."), 4000);
+  showLoading("Running Multimodal Verification...");
+  const t1 = setTimeout(() => updateLoadingStep("Evaluating Facts, Context & Science..."), 1800);
+  const t2 = setTimeout(() => updateLoadingStep("Verifying Image Provenance..."), 4000);
 
   try {
     const formData = new FormData();
@@ -275,11 +261,9 @@ function renderReport(data) {
   // Neon color mapping: cyanx (#54f6ef) for high, orange (#ff8a3d) for half-truth/mid, pink (#f04dba) for fake/AI
   const neonColor = score >= 75 ? "#54f6ef" : score >= 45 ? "#ff8a3d" : "#f04dba";
 
-  // ── Update Hero Radar Dial & Latest Scan Telemetry Card ──
+  // ── Update Hero Radar Dial & Telemetry Card ──
   const heroNum = document.getElementById("hero-confidence-number");
   if (heroNum) animateCounter("hero-confidence-number", 0, score, 900);
-  const heroBadgeTop = document.getElementById("hero-badge-top");
-  if (heroBadgeTop) heroBadgeTop.textContent = verdict.replace(/_/g, " ");
 
   const latestScore = document.getElementById("latest-scan-score");
   const latestBadge = document.getElementById("latest-scan-badge");
@@ -289,11 +273,11 @@ function renderReport(data) {
 
   if (latestScore) latestScore.textContent = `${score}%`;
   if (latestBadge) latestBadge.textContent = verdict.replace(/_/g, " ");
-  if (latestTitle) latestTitle.textContent = score >= 75 ? "Verified Signal" : score >= 45 ? "Half-Truth / Partial" : "Contradicted / Synthetic";
+  if (latestTitle) latestTitle.textContent = score >= 75 ? "Verified Authentic" : score >= 45 ? "Half-Truth Detected" : "Contradicted / Fake";
   if (latestMeta) {
     const totalSources = (data.local_and_youtube_sources?.length || 0) +
       (data.claims?.reduce((acc, c) => acc + (c.citations?.length || 0), 0) || 0);
-    latestMeta.textContent = `Based on ${Math.max(3, totalSources)} live evidence sources & scientific reasoning.`;
+    latestMeta.textContent = `Supported by ${Math.max(3, totalSources)} verified evidence sources.`;
   }
   if (latestRing) {
     latestRing.style.borderColor = neonColor;
@@ -315,15 +299,15 @@ function renderReport(data) {
 
   // ── Verdict Badge ──
   const verdictLabels = {
-    AUTHENTIC: "✅ Authentic & Verified News",
-    MOSTLY_TRUE: "🟢 Mostly True News",
-    HALF_TRUTH: "⚠️ True News, But HALF Story (Partial Truth)",
-    MISLEADING: "⚠️ Misleading Framing",
-    CONTRADICTED: "❌ Fake / Contradicted News",
-    CONTEXT_HIJACKED: "🚨 Real Image, Misused Context",
-    AI_GENERATED_IMAGE: "🤖 AI-Generated Image Detected",
-    UNVERIFIED: "❓ Unverified / Investigating",
-    SATIRE_LIKELY: "🎭 Likely Satire"
+    AUTHENTIC: "Verified Authentic",
+    MOSTLY_TRUE: "Mostly True",
+    HALF_TRUTH: "Half-Truth (Partial Story)",
+    MISLEADING: "Misleading",
+    CONTRADICTED: "Contradicted / Fake",
+    CONTEXT_HIJACKED: "Context Hijacked",
+    AI_GENERATED_IMAGE: "AI-Generated Image",
+    UNVERIFIED: "Unverified",
+    SATIRE_LIKELY: "Likely Satire"
   };
   const badge = document.getElementById("verdict-badge");
   badge.className = `inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider border verdict-${verdict}`;
@@ -335,13 +319,13 @@ function renderReport(data) {
   if (covBadge && covLabel) {
     if (data.coverage_level === "LOW_INTERNET_LOCAL_VERIFIED") {
       covBadge.classList.remove("hidden");
-      covLabel.textContent = "📡 Low Web Count → Verified via Local News & YouTube";
+      covLabel.textContent = "Verified via Local News & Video";
     } else if (data.coverage_level === "MINIMAL_OR_NONE") {
       covBadge.classList.remove("hidden");
-      covLabel.textContent = "🔬 Rare Topic → Analyzed via Local Search & Science";
+      covLabel.textContent = "Analyzed via Science & Logic";
     } else if (data.coverage_level === "HIGH_MAINSTREAM") {
       covBadge.classList.remove("hidden");
-      covLabel.textContent = "🌐 Verified Across Mainstream & National News";
+      covLabel.textContent = "Verified Across Mainstream Press";
     } else {
       covBadge.classList.add("hidden");
     }
@@ -353,7 +337,7 @@ function renderReport(data) {
     ? new Date(data.analyzed_at).toLocaleString()
     : new Date().toLocaleString();
 
-  // ── 2. Half-Truth ("True News, But Half") Section ──
+  // ── 2. Half-Truth Section ──
   const halfTruthSection = document.getElementById("half-truth-section");
   const missingCtxText = data.missing_context_full_story || data.missing_context || "";
   const isHalfTruth = Boolean(
@@ -364,14 +348,14 @@ function renderReport(data) {
   if (isHalfTruth && (data.what_is_true || missingCtxText)) {
     halfTruthSection.classList.remove("hidden");
     document.getElementById("what-is-true-text").textContent =
-      data.what_is_true || "Contains a real event or statistic, but omits crucial surrounding facts.";
+      data.what_is_true || "Contains a real event or statistic, but omits crucial surrounding context.";
     document.getElementById("missing-context-text").textContent =
-      missingCtxText || data.full_news_explanation || "See complete news explanation below.";
+      missingCtxText || data.full_news_explanation || "See complete explanation below.";
   } else {
     halfTruthSection.classList.add("hidden");
   }
 
-  // ── 3. Full News Explanation Section ──
+  // ── 3. Full News Explanation ──
   const fullNewsSection = document.getElementById("full-news-section");
   if (data.full_news_explanation && data.full_news_explanation.trim().length > 5) {
     fullNewsSection.classList.remove("hidden");
@@ -380,7 +364,7 @@ function renderReport(data) {
     fullNewsSection.classList.add("hidden");
   }
 
-  // ── 4. Reader Impact & Awareness Warning Section ──
+  // ── 4. Reader Impact Warning ──
   const impactSection = document.getElementById("impact-section");
   if (data.reader_impact_warning && data.reader_impact_warning.trim().length > 5) {
     impactSection.classList.remove("hidden");
@@ -389,7 +373,7 @@ function renderReport(data) {
     impactSection.classList.add("hidden");
   }
 
-  // ── 5. Facts & Scientific Reasoning Section ──
+  // ── 5. Facts & Science Section ──
   const scienceSection = document.getElementById("science-section");
   if (data.facts_and_science_analysis && data.facts_and_science_analysis.trim().length > 5) {
     scienceSection.classList.remove("hidden");
@@ -398,7 +382,7 @@ function renderReport(data) {
     scienceSection.classList.add("hidden");
   }
 
-  // ── 6. Image / Media Forensics & Incident Dossier ──
+  // ── 6. Image Forensics ──
   const mediaSection = document.getElementById("media-section");
   if (data.media_verification && data.media_verification.checked) {
     mediaSection.classList.remove("hidden");
@@ -407,7 +391,7 @@ function renderReport(data) {
     mediaSection.classList.add("hidden");
   }
 
-  // ── 7. Local News Websites & YouTube Broadcasts ──
+  // ── 7. Sources & Broadcasts ──
   const localSection = document.getElementById("local-youtube-section");
   if (data.local_and_youtube_sources && data.local_and_youtube_sources.length > 0) {
     localSection.classList.remove("hidden");
@@ -417,7 +401,7 @@ function renderReport(data) {
     localSection.classList.add("hidden");
   }
 
-  // ── 8. Claim-by-Claim Breakdown ──
+  // ── 8. Claim Breakdown ──
   const claimsSection = document.getElementById("claims-section");
   if (data.claims && data.claims.length > 0) {
     claimsSection.classList.remove("hidden");
@@ -426,7 +410,7 @@ function renderReport(data) {
     claimsSection.classList.add("hidden");
   }
 
-  // ── 9. 360° Narrative Matrix ──
+  // ── 9. Narrative Perspectives ──
   const narrativeSection = document.getElementById("narrative-section");
   if (data.narrative_matrix && data.narrative_matrix.perspectives && data.narrative_matrix.perspectives.length > 0) {
     narrativeSection.classList.remove("hidden");
@@ -438,16 +422,16 @@ function renderReport(data) {
     narrativeSection.classList.add("hidden");
   }
 
-  // ── 10. Self-Learning Memory Status ──
+  // ── 10. Help Improve Accuracy Status ──
   const learnText = document.getElementById("learning-status-text");
   if (learnText) {
     const lm = data.learning_metadata || {};
     if (lm.recalled_facts_count && lm.recalled_facts_count > 0) {
-      learnText.textContent = `⚡ Instant Memory Recall: Matched ${lm.recalled_facts_count} prior verified lesson(s) in AI Memory. Total learned facts: ${lm.total_learned_facts || 1} · Tracked sources: ${lm.total_tracked_sources || 0}.`;
+      learnText.textContent = `⚡ Matched verified facts in memory. Total facts indexed: ${lm.total_learned_facts || 1}.`;
     } else if (lm.learned_from_this_run) {
-      learnText.textContent = `🧠 Learned & Stored: Signal/Truth extracted the verified facts and source reliability from this scan into permanent SQLite memory (${lm.total_learned_facts || 1} facts · ${lm.total_tracked_sources || 0} sources).`;
+      learnText.textContent = `🧠 Verified details saved to memory bank.`;
     } else {
-      learnText.textContent = `🧠 Self-Learning Active: Confirm accuracy or teach the engine below to reinforce its permanent knowledge base.`;
+      learnText.textContent = `Help keep VeriLens accurate by confirming or submitting a correction below.`;
     }
   }
 
@@ -483,7 +467,7 @@ function renderClaimCard(claim) {
         <iconify-icon icon="${icon}" class="text-xl mt-0.5 shrink-0 ${color}"></iconify-icon>
         <div class="flex-1 min-w-0">
           <div class="flex flex-wrap items-center gap-2 mb-2">
-            <span class="badge badge-${claim.status}">${claim.status === "HALF_TRUE" ? "HALF-TRUE (PARTIAL)" : claim.status}</span>
+            <span class="badge badge-${claim.status}">${claim.status === "HALF_TRUE" ? "HALF-TRUE" : claim.status}</span>
             <span class="text-xs text-white/40 font-mono">Confidence: ${confidencePct}%</span>
           </div>
           <p class="text-sm text-white font-semibold mb-1">"${escapeHtml(claim.claim)}"</p>
@@ -503,8 +487,8 @@ function renderMediaCheck(media) {
   const realProb = 100 - aiProb;
 
   const authBadge = isAI
-    ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-pink/15 text-pink border border-pink/40">🤖 AI-Generated / Synthetic Image (${aiProb}% AI Probability)</span>`
-    : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyanx/15 text-cyanx border border-cyanx/40">📷 Real Camera Photograph (${realProb}% Authenticity)</span>`;
+    ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-pink/15 text-pink border border-pink/40">AI-Generated Image (${aiProb}% Probability)</span>`
+    : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-cyanx/15 text-cyanx border border-cyanx/40">Camera Photograph (${realProb}% Authenticity)</span>`;
 
   const forensicList = media.forensic_analysis || media.ai_detection_reasons || [];
   const reasons = forensicList.map(r =>
@@ -517,17 +501,17 @@ function renderMediaCheck(media) {
 
   const hijackBanner = media.is_context_hijacked ? `
     <div class="hijack-alert mt-4">
-      <p class="font-bold text-pink text-sm mb-1">🚨 Context Hijack / Misleading Caption Detected</p>
+      <p class="font-bold text-pink text-sm mb-1">🚨 Context Manipulation Detected</p>
       <p class="text-xs text-white/80 leading-relaxed">${escapeHtml(media.discrepancy_details || media.warning_message || "")}</p>
     </div>
   ` : "";
 
   return `
     <div class="space-y-4">
-      <!-- Task 1: Real vs. AI-Generated Forensics -->
+      <!-- Image Authenticity -->
       <div class="rounded-xl border ${isAI ? 'border-pink/50' : 'border-cyanx/40'} bg-black/50 p-4">
         <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
-          <span class="text-[10px] font-bold uppercase tracking-[.2em] text-white/50">Task 1 · Image Authenticity (Real vs. AI Detector)</span>
+          <span class="text-[10px] font-bold uppercase tracking-[.2em] text-white/50">Image Authenticity</span>
           ${authBadge}
         </div>
         <div class="w-full bg-white/10 h-2 rounded-full overflow-hidden mb-3">
@@ -536,27 +520,27 @@ function renderMediaCheck(media) {
         ${reasons ? `<ul class="space-y-1.5 mt-2">${reasons}</ul>` : ""}
       </div>
 
-      <!-- Task 2: Incident, Location & Date Dossier -->
+      <!-- Incident & Location Dossier -->
       <div class="rounded-xl border border-white/10 bg-black/50 p-4">
         <p class="text-[10px] font-bold uppercase tracking-[.2em] text-cyanx mb-3">
-          Task 2 · Related Incident, Location &amp; Origins
+          Related Incident &amp; Location
         </p>
         <div class="grid md:grid-cols-3 gap-3 mb-3">
           <div class="rounded-lg border border-white/10 bg-panel p-3">
-            <p class="text-[10px] uppercase tracking-wider text-white/40 font-bold">📌 Related Incident</p>
-            <p class="font-display text-sm font-bold text-white mt-1">${escapeHtml(media.related_incident || "Identified Visual Scene")}</p>
+            <p class="text-[10px] uppercase tracking-wider text-white/40 font-bold">Related Incident</p>
+            <p class="font-display text-sm font-bold text-white mt-1">${escapeHtml(media.related_incident || "Identified Scene")}</p>
           </div>
           <div class="rounded-lg border border-white/10 bg-panel p-3">
-            <p class="text-[10px] uppercase tracking-wider text-white/40 font-bold">📍 Location Where Taken</p>
-            <p class="font-display text-sm font-bold text-cyanx mt-1">${escapeHtml(media.location_taken || "Location under verification")}</p>
+            <p class="text-[10px] uppercase tracking-wider text-white/40 font-bold">Location</p>
+            <p class="font-display text-sm font-bold text-cyanx mt-1">${escapeHtml(media.location_taken || "Under Verification")}</p>
           </div>
           <div class="rounded-lg border border-white/10 bg-panel p-3">
-            <p class="text-[10px] uppercase tracking-wider text-white/40 font-bold">📅 Incident Date / Period</p>
+            <p class="text-[10px] uppercase tracking-wider text-white/40 font-bold">Date / Period</p>
             <p class="font-display text-sm font-bold text-orange mt-1">${escapeHtml(media.incident_date || (media.earliest_found_year ? String(media.earliest_found_year) : "Recent / Archival"))}</p>
           </div>
         </div>
         <div class="rounded-lg border border-white/10 bg-panel/70 p-3">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-white/45 mb-1">📖 Full Incident Story &amp; Visual Context:</p>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-white/45 mb-1">Story &amp; Context:</p>
           <p class="text-sm text-white/85 leading-relaxed">${escapeHtml(media.incident_details || media.original_context || media.warning_message || "")}</p>
         </div>
         ${sources ? `<div class="mt-3 flex flex-wrap gap-1.5">${sources}</div>` : ""}
@@ -568,8 +552,8 @@ function renderMediaCheck(media) {
 function renderLocalOrYoutubeCard(item) {
   const isYT = item.source_type === "youtube" || item.source_type === "YOUTUBE_VIDEO";
   const badge = isYT
-    ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-pink/15 text-pink border border-pink/35">▶️ YouTube Broadcast</span>`
-    : `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-cyanx/15 text-cyanx border border-cyanx/35">🗞️ Local / Regional News</span>`;
+    ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-pink/15 text-pink border border-pink/35">YouTube Broadcast</span>`
+    : `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-cyanx/15 text-cyanx border border-cyanx/35">News Report</span>`;
 
   return `
     <div class="rounded-xl border border-white/10 bg-black/45 p-4 flex flex-col justify-between hover:border-cyanx/40 transition">
@@ -630,7 +614,7 @@ async function sendFeedback(isAccurate) {
     if (!resp.ok) throw new Error(await resp.text());
     const res = await resp.json();
     if (confirmEl) {
-      confirmEl.textContent = `✅ ${res.message || "Self-learning memory updated!"}`;
+      confirmEl.textContent = `✅ ${res.message || "Feedback recorded!"}`;
       confirmEl.classList.remove("hidden");
     }
     document.getElementById("correction-box").classList.add("hidden");
